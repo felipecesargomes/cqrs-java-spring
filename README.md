@@ -1,5 +1,15 @@
 # CQRS com Spring Boot
 
+![Java](https://img.shields.io/badge/Java-17-007396?style=flat-square&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Spring Web](https://img.shields.io/badge/Spring%20Web-Framework-6DB33F?style=flat-square&logo=spring&logoColor=white)
+![Spring Data JPA](https://img.shields.io/badge/Spring%20Data%20JPA-Persistence-6DB33F?style=flat-square&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.x-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![Maven](https://img.shields.io/badge/Maven-Wrapper-C71A36?style=flat-square&logo=apachemaven&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Kafka](https://img.shields.io/badge/Apache%20Kafka-Event%20Streaming-231F20?style=flat-square&logo=apachekafka&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=flat-square&logo=mongodb&logoColor=white)
+
 Este repositório é um estudo prático de CQRS (Command Query Responsibility Segregation) usando Java e Spring Boot.
 
 O projeto está dividido em dois módulos:
@@ -155,19 +165,77 @@ USE command;
 
 Garanta que o JSON esteja entre aspas simples e as chaves estejam balanceadas.
 
-## Estrutura do repositório
+## Mapa do projeto
 
 ```text
 cqrs/
-  command/
-  query/
-  docker-compose.yml
-  pom.xml
+├── command/
+│   ├── pom.xml
+│   └── src/
+│       └── main/
+│           ├── java/com/devdeolho/
+│           │   ├── CommandApplication.java
+│           │   ├── bus/
+│           │   │   └── CommandBus.java
+│           │   ├── controller/
+│           │   │   ├── ProductCommandController.java
+│           │   │   └── ReviewCommandController.java
+│           │   ├── domain/
+│           │   │   ├── Product.java
+│           │   │   ├── Review.java
+│           │   │   └── command/
+│           │   │       ├── Command.java
+│           │   │       ├── CreateProductCommand.java
+│           │   │       └── CreateReviewCommand.java
+│           │   ├── handler/
+│           │   │   ├── CommandHandler.java
+│           │   │   ├── CreateProductCommandHandler.java
+│           │   │   └── CreateReviewCommandHandler.java
+│           │   └── repository/
+│           │       ├── ProductRepository.java
+│           │       └── ReviewRepository.java
+│           └── resources/
+│               └── application.yml
+├── query/
+│   ├── pom.xml
+│   └── src/
+│       └── main/
+│           ├── java/com/devdeolho/
+│           │   └── QueryApplication.java
+│           └── resources/
+│               └── application.yml
+├── docker-compose.yml
+├── pom.xml
+├── mvnw
+├── mvnw.cmd
+├── README.md
+└── HELP.md
 ```
 
-## Próximos passos sugeridos
+### O que cada diretório representa
 
-- Adicionar endpoints de consulta no módulo `query`
-- Integrar eventos (Kafka) entre escrita e leitura
-- Versionar migrations com Flyway ou Liquibase
-- Criar testes de integração para os handlers
+- `command/`: módulo de escrita (lado Command do CQRS).
+- `query/`: módulo de leitura (lado Query do CQRS), preparado para separar consultas da escrita.
+- `command/src/main/java/com/devdeolho/controller/`: entrada HTTP da escrita (`POST` de produto e review).
+- `command/src/main/java/com/devdeolho/bus/`: roteamento de comando para handler.
+- `command/src/main/java/com/devdeolho/domain/`: entidades de domínio persistidas no MySQL.
+- `command/src/main/java/com/devdeolho/domain/command/`: objetos de comando (payload/intenção da ação).
+- `command/src/main/java/com/devdeolho/handler/`: casos de uso de escrita.
+- `command/src/main/java/com/devdeolho/repository/`: acesso ao banco com Spring Data JPA.
+- `command/src/main/resources/` e `query/src/main/resources/`: configurações dos módulos (`application.yml`).
+
+### O que os arquivos principais fazem
+
+- `pom.xml` (raiz): POM pai multi-módulo, define Java 17 e dependências comuns.
+- `command/pom.xml`: dependências específicas do módulo de escrita (JPA e MySQL).
+- `query/pom.xml`: dependências do módulo de leitura.
+- `docker-compose.yml`: infraestrutura local (MySQL, Kafka, Zookeeper, Kafdrop e MongoDB).
+- `command/src/main/java/com/devdeolho/CommandApplication.java`: bootstrap Spring Boot do módulo `command`.
+- `query/src/main/java/com/devdeolho/QueryApplication.java`: bootstrap Spring Boot do módulo `query`.
+- `command/src/main/java/com/devdeolho/bus/CommandBus.java`: resolve qual handler executa cada command.
+- `command/src/main/java/com/devdeolho/controller/ProductCommandController.java`: endpoint `POST /api/v1/products`.
+- `command/src/main/java/com/devdeolho/controller/ReviewCommandController.java`: endpoint `POST /api/v1/reviews`.
+- `command/src/main/java/com/devdeolho/handler/CreateProductCommandHandler.java`: cria e persiste produto.
+- `command/src/main/java/com/devdeolho/handler/CreateReviewCommandHandler.java`: cria review associada a produto.
+- `command/src/main/resources/application.yml`: datasource MySQL (`3307`) e configuração JPA do módulo `command`.
+- `query/src/main/resources/application.yml`: configuração do módulo `query`.
