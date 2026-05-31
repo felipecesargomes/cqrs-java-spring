@@ -1,10 +1,6 @@
 package com.devdeolho.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,8 +13,12 @@ public class Product {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Integer id;
     private String imageUrl;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
+
     private BigDecimal value;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
