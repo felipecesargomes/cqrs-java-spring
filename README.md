@@ -21,6 +21,8 @@ Hoje, o fluxo de escrita já está funcional e expõe endpoints para criar produ
 
 ## Arquitetura resumida
 
+![Diagrama CQRS](docs/cqrs-flow.svg)
+
 No módulo `command`, o fluxo segue este caminho:
 
 `Controller -> CommandBus -> CommandHandler -> Repository -> Banco`
