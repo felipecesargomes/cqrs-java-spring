@@ -4,6 +4,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -11,7 +12,9 @@ public class CreateProductCommand implements Command {
     private String imageUrl;
     @NotBlank
     private String name;
+    @NotBlank
     private String description;
+    @NotNull
     private BigDecimal value;
 
     public CreateProductCommand() {
