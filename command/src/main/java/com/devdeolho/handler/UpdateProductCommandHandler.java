@@ -1,6 +1,5 @@
 package com.devdeolho.handler;
 
-import com.devdeolho.domain.Product;
 import com.devdeolho.domain.command.UpdateProductCommand;
 import com.devdeolho.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ public class UpdateProductCommandHandler implements CommandHandler<UpdateProduct
 
     @Override
     public void handle(UpdateProductCommand command) {
-        Product productToBeSaved = productRepository.findById(command.getId())
+        var productToBeSaved = productRepository.findById(command.getId())
                 .orElseThrow(IllegalArgumentException::new)
                 .toBuilder()
                 .imageUrl(command.getImageUrl())

@@ -2,6 +2,7 @@ package com.devdeolho.controller;
 
 import com.devdeolho.bus.CommandBus;
 import com.devdeolho.domain.command.CreateProductCommand;
+import com.devdeolho.domain.command.UpdateProductCommand;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,16 @@ public class ProductCommandController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@RequestBody @Valid CreateProductCommand createProductCommand) {
         commandBus.execute(createProductCommand);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateProduct(
+            @PathVariable("id") Integer id,
+            @RequestBody @Valid UpdateProductCommand updateProductCommand
+    ) {
+        updateProductCommand.setId(id);
+        commandBus.execute(updateProductCommand);
     }
 
 }

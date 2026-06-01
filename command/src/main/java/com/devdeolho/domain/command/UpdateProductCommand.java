@@ -27,6 +27,26 @@ public class UpdateProductCommand implements Command {
         this.value = value;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setValue(BigDecimal value) {
+        this.value = value;
+    }
+
     public Integer getId() {
         return id;
     }
