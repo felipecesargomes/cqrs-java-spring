@@ -48,6 +48,16 @@ public class Product {
         return new Builder();
     }
 
+    public Builder toBuilder() {
+        return builder()
+                .id(this.id)
+                .imageUrl(this.imageUrl)
+                .name(this.name)
+                .description(this.description)
+                .value(this.value)
+                .reviews(new ArrayList<>(this.reviews));
+    }
+
     public static class Builder {
         private Integer id;
         private String imageUrl;
