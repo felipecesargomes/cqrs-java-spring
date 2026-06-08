@@ -78,6 +78,47 @@ Por padrão, a API sobe em `http://localhost:8080`.
 
 ## Endpoints de escrita
 
+### Fluxo de teste completo (Linux)
+
+> Os endpoints de escrita retornam corpo vazio. Para este fluxo, use um `productId` conhecido (ex.: `1` em base limpa com `ddl-auto: create`).
+
+```bash
+API_URL="http://localhost:8080"
+PRODUCT_ID=1
+
+# 1) Criar produto
+curl -i -X POST "$API_URL/api/v1/products" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "imageUrl": "https://exemplo.com/produto.png",
+    "name": "Mouse Gamer",
+    "description": "Mouse RGB 16000 DPI",
+    "value": 199.90
+  }'
+
+# 2) Atualizar produto
+curl -i -X PUT "$API_URL/api/v1/products/$PRODUCT_ID" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "imageUrl": "https://exemplo.com/produto-v2.png",
+    "name": "Mouse Gamer Pro",
+    "description": "Mouse RGB 26000 DPI",
+    "value": 249.90
+  }'
+
+# 3) Criar review para o produto
+curl -i -X POST "$API_URL/api/v1/reviews" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "Felipe",
+    "rating": 5,
+    "productId": '$PRODUCT_ID'
+  }'
+
+# 4) Deletar produto
+curl -i -X DELETE "$API_URL/api/v1/products/$PRODUCT_ID"
+```
+
 ### Criar produto
 
 - Método: `POST`
@@ -218,7 +259,7 @@ cqrs/
 
 - `command/`: módulo de escrita (lado Command do CQRS).
 - `query/`: módulo de leitura (lado Query do CQRS), preparado para separar consultas da escrita.
-- `command/src/main/java/com/devdeolho/controller/`: entrada HTTP da escrita (`POST` de produto e review).
+- `command/src/main/java/com/devdeolho/controller/`: entrada HTTP da escrita (`POST`, `PUT` e `DELETE`).
 - `command/src/main/java/com/devdeolho/bus/`: roteamento de comando para handler.
 - `command/src/main/java/com/devdeolho/domain/`: entidades de domínio persistidas no MySQL.
 - `command/src/main/java/com/devdeolho/domain/command/`: objetos de comando (payload/intenção da ação).
@@ -235,7 +276,7 @@ cqrs/
 - `command/src/main/java/com/devdeolho/CommandApplication.java`: bootstrap Spring Boot do módulo `command`.
 - `query/src/main/java/com/devdeolho/QueryApplication.java`: bootstrap Spring Boot do módulo `query`.
 - `command/src/main/java/com/devdeolho/bus/CommandBus.java`: resolve qual handler executa cada command.
-- `command/src/main/java/com/devdeolho/controller/ProductCommandController.java`: endpoint `POST /api/v1/products`.
+- `command/src/main/java/com/devdeolho/controller/ProductCommandController.java`: endpoints `POST /api/v1/products`, `PUT /api/v1/products/{id}` e `DELETE /api/v1/products/{id}`.
 - `command/src/main/java/com/devdeolho/controller/ReviewCommandController.java`: endpoint `POST /api/v1/reviews`.
 - `command/src/main/java/com/devdeolho/handler/CreateProductCommandHandler.java`: cria e persiste produto.
 - `command/src/main/java/com/devdeolho/handler/CreateReviewCommandHandler.java`: cria review associada a produto.
