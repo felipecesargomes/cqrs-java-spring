@@ -67,14 +67,6 @@ Arquivo: `command/src/main/resources/application.yml`
 Com `ddl-auto: create`, o Hibernate recria as tabelas a cada inicialização do app.
 Se quiser manter dados entre reinícios, troque para `update`.
 
-## Executando a aplicação command
-
-```bash
-cd /c/Users/felip/Downloads/cqrs/cqrs
-./mvnw -pl command spring-boot:run
-```
-
-Por padrão, a API sobe em `http://localhost:8080`.
 
 ## Endpoints de escrita
 
@@ -83,11 +75,8 @@ Por padrão, a API sobe em `http://localhost:8080`.
 > Os endpoints de escrita retornam corpo vazio. Para este fluxo, use um `productId` conhecido (ex.: `1` em base limpa com `ddl-auto: create`).
 
 ```bash
-API_URL="http://localhost:8080"
-PRODUCT_ID=1
-
 # 1) Criar produto
-curl -i -X POST "$API_URL/api/v1/products" \
+curl -i -X POST "http://localhost:8080/api/v1/products" \
   -H "Content-Type: application/json" \
   -d '{
     "imageUrl": "https://exemplo.com/produto.png",
@@ -97,7 +86,7 @@ curl -i -X POST "$API_URL/api/v1/products" \
   }'
 
 # 2) Atualizar produto
-curl -i -X PUT "$API_URL/api/v1/products/$PRODUCT_ID" \
+curl -i -X PUT "http://localhost:8080/api/v1/products/1" \
   -H "Content-Type: application/json" \
   -d '{
     "imageUrl": "https://exemplo.com/produto-v2.png",
@@ -107,16 +96,16 @@ curl -i -X PUT "$API_URL/api/v1/products/$PRODUCT_ID" \
   }'
 
 # 3) Criar review para o produto
-curl -i -X POST "$API_URL/api/v1/reviews" \
+curl -i -X POST "http://localhost:8080/api/v1/reviews" \
   -H "Content-Type: application/json" \
   -d '{
     "userName": "Felipe",
     "rating": 5,
-    "productId": '$PRODUCT_ID'
+    "productId": 1
   }'
 
 # 4) Deletar produto
-curl -i -X DELETE "$API_URL/api/v1/products/$PRODUCT_ID"
+curl -i -X DELETE "http://localhost:8080/api/v1/products/1"
 ```
 
 ### Criar produto
@@ -127,7 +116,7 @@ curl -i -X DELETE "$API_URL/api/v1/products/$PRODUCT_ID"
 Exemplo com `curl`:
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/products" \
+curl -i -X POST "http://localhost:8080/api/v1/products" \
   -H "Content-Type: application/json" \
   -d '{
     "imageUrl": "https://exemplo.com/produto.png",
@@ -145,7 +134,7 @@ curl -X POST "http://localhost:8080/api/v1/products" \
 Exemplo com `curl`:
 
 ```bash
-curl -X POST "http://localhost:8080/api/v1/reviews" \
+curl -i -X POST "http://localhost:8080/api/v1/reviews" \
   -H "Content-Type: application/json" \
   -d '{
     "userName": "Felipe",
@@ -173,14 +162,6 @@ SELECT * FROM products;
 SELECT * FROM reviews;
 ```
 
-## Testes
-
-Para rodar os testes do módulo `command`:
-
-```bash
-cd /c/Users/felip/Downloads/cqrs/cqrs
-./mvnw -pl command -am test
-```
 
 ## Problemas comuns
 
